@@ -35,32 +35,34 @@
             window.location.href = "/games/?md5=" + md5;
         }
 
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == XMLHttpRequest.DONE) {
-                var veritabani = JSON.parse(xhr.responseText);
-                var oyunlar = "";
-                for (var f1 = 0; f1 < veritabani.length; f1++) {
-                    var resim = veritabani[f1]["Asset"];
-                    for (var f2 = 0; f2 < veritabani[f1]["Asset"].length; f2++) {
-                        if (veritabani[f1]["Asset"][f2].includes("512x512")) {
-                            resim = veritabani[f1]["Asset"][f2];
+        for (var f1 = 1; f1 < 6; f1++) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    var veritabani = JSON.parse(xhr.responseText);
+                    var oyunlar = "";
+                    for (var f2 = 0; f2 < veritabani.length; f2++) {
+                        var resim = veritabani[f2]["Asset"];
+                        for (var f3 = 0; f3 < veritabani[f2]["Asset"].length; f3++) {
+                            if (veritabani[f2]["Asset"][f3].includes("512x512")) {
+                                resim = veritabani[f2]["Asset"][f3];
+                            }
                         }
+                        oyunlar += '<div class="col-6">';
+                        oyunlar += '<div style="cursor:pointer;" md5="' + veritabani[f2]["Md5"] + '" onclick="oyunuAc(this)" class="card h-100 shadow">';
+                        oyunlar += '<img src="' + resim + '" class="card-img-top" alt="...">';
+                        oyunlar += '<div class="card-body">';
+                        oyunlar += '<h5 class="card-title">' + veritabani[f2]["Title"] + '</h5>';
+                        oyunlar += '</div>';
+                        oyunlar += '</div>'
+                        oyunlar += '</div>';
                     }
-                    oyunlar += '<div class="col-6">';
-                    oyunlar += '<div style="cursor:pointer;" md5="' + veritabani[f1]["Md5"] + '" onclick="oyunuAc(this)" class="card h-100 shadow">';
-                    oyunlar += '<img src="' + resim + '" class="card-img-top" alt="...">';
-                    oyunlar += '<div class="card-body">';
-                    oyunlar += '<h5 class="card-title">' + veritabani[f1]["Title"] + '</h5>';
-                    oyunlar += '</div>';
-                    oyunlar += '</div>'
-                    oyunlar += '</div>';
+                    document.getElementById("oyunlar").innerHTML = oyunlar;
                 }
-                document.getElementById("oyunlar").innerHTML = oyunlar;
             }
+            xhr.open('GET', '/veritabani/racing/'+f1+'.json', true);
+            xhr.send(null);
         }
-        xhr.open('GET', '/veritabani/racing/1.json', true);
-        xhr.send(null);
 
 
     </script>
